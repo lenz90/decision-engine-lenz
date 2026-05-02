@@ -23,8 +23,8 @@ VITE_SUPABASE_ANON_KEY=
 En Supabase habilita Google como proveedor de autenticacion. En la allow list de redirect URLs agrega:
 
 ```text
-http://localhost:3000/home
-http://127.0.0.1:3000/home
+http://localhost:3000/auth/callback
+http://127.0.0.1:3000/auth/callback
 ```
 
-El login usa `supabase.auth.signInWithOAuth({ provider: "google" })` y Supabase gestiona la sesion del usuario.
+El login usa `supabase.auth.signInWithOAuth({ provider: "google" })`, vuelve por `/auth/callback`, crea el perfil si no existe y redirige a `/dashboard`.

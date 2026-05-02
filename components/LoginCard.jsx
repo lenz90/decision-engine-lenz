@@ -7,7 +7,7 @@ export default function LoginCard({ authError, supabaseConfig }) {
   const [error, setError] = useState(authError);
   const [isLoading, setIsLoading] = useState(false);
 
-  async function handleGoogleLogin() {
+  async function signInWithGoogle() {
     setError("");
 
     if (!supabaseConfig?.url || !supabaseConfig?.anonKey) {
@@ -21,7 +21,7 @@ export default function LoginCard({ authError, supabaseConfig }) {
     const { error: signInError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/home`,
+        redirectTo: `${window.location.origin}/auth/callback`,
         queryParams: {
           prompt: "select_account",
         },
@@ -49,7 +49,7 @@ export default function LoginCard({ authError, supabaseConfig }) {
       <button
         className="gmail-button"
         type="button"
-        onClick={handleGoogleLogin}
+        onClick={signInWithGoogle}
         disabled={isLoading}
       >
         <span className="google-mark" aria-hidden="true">
