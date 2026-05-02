@@ -185,6 +185,7 @@ input {
 
 .auth-visual__image {
   position: relative;
+  width: auto;
   min-height: 180px;
   margin: 4px -18px 0;
   overflow: hidden;
@@ -194,6 +195,7 @@ input {
 }
 
 .auth-visual__image img {
+  min-height: 180px;
   object-fit: cover;
   object-position: center;
   opacity: 0.86;
@@ -203,6 +205,7 @@ input {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
+  align-self: end;
 }
 
 .decision-steps span {
@@ -414,6 +417,10 @@ input {
   }
 
   .auth-visual__image {
+    min-height: 150px;
+  }
+
+  .auth-visual__image img {
     min-height: 150px;
   }
 

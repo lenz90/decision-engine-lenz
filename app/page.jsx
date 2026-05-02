@@ -9,7 +9,7 @@ const phases = [
 ];
 
 const authErrors = {
-  missing_config: "Faltan las credenciales OAuth de Google en el entorno.",
+  missing_config: "Configura VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY.",
   invalid_state: "No se pudo validar la solicitud de Google. Intentalo de nuevo.",
   oauth_denied: "Google no autorizo el acceso.",
   token_error: "No se pudo completar el intercambio OAuth con Google.",
@@ -20,6 +20,10 @@ const authErrors = {
 export default async function LandingPage({ searchParams }) {
   const params = await searchParams;
   const authError = authErrors[params?.auth] ?? "";
+  const supabaseConfig = {
+    url: process.env.VITE_SUPABASE_URL || "",
+    anonKey: process.env.VITE_SUPABASE_ANON_KEY || "",
+  };
 
   return (
     <main className="auth-page">
@@ -59,7 +63,7 @@ export default async function LandingPage({ searchParams }) {
           </div>
         </div>
 
-        <LoginCard authError={authError} />
+        <LoginCard authError={authError} supabaseConfig={supabaseConfig} />
       </section>
     </main>
   );

@@ -1,25 +1,66 @@
-export default function LoginCard({ authError }) {
+"use client";
+
+import { useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+
+export default function LoginCard({ authError, supabaseConfig }) {
+  const [error, setError] = useState(authError);
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleGoogleLogin() {
+    setError("");
+
+    if (!supabaseConfig?.url || !supabaseConfig?.anonKey) {
+      setError("Configura VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    const supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey);
+    const { error: signInError } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/home`,
+        queryParams: {
+          prompt: "select_account",
+        },
+      },
+    });
+
+    if (signInError) {
+      setError(signInError.message);
+      setIsLoading(false);
+    }
+  }
+
   return (
     <aside className="auth-login" aria-label="Acceso a Decision Engine">
       <div>
         <p className="eyebrow">Acceso seguro</p>
         <h2>Inicia sesion</h2>
         <p className="auth-login__subtitle">
-          Usa Google OAuth para entrar a Decision Engine.
+          Usa Google OAuth con Supabase para entrar a Decision Engine.
         </p>
       </div>
 
-      {authError ? <p className="form-error">{authError}</p> : null}
+      {error ? <p className="form-error">{error}</p> : null}
 
-      <a className="gmail-button" href="/api/auth/google">
+      <button
+        className="gmail-button"
+        type="button"
+        onClick={handleGoogleLogin}
+        disabled={isLoading}
+      >
         <span className="google-mark" aria-hidden="true">
           G
         </span>
-        Continuar con Google
-      </a>
+        {isLoading ? "Conectando..." : "Continuar con Google"}
+      </button>
 
       <p className="login-note">
-        Requiere una cuenta Gmail. La sesion se guarda en una cookie httpOnly.
+        Requiere una cuenta Gmail. Supabase gestiona la sesion y el proveedor
+        OAuth.
       </p>
     </aside>
   );
