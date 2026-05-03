@@ -28,3 +28,9 @@ http://127.0.0.1:3000/auth/callback
 ```
 
 El login usa `supabase.auth.signInWithOAuth({ provider: "google" })`, vuelve por `/auth/callback`, crea el perfil si no existe y redirige a `/dashboard`.
+
+Para que el callback reciba `?code=...` en lugar de tokens en el hash de la URL, el cliente Supabase usa OAuth PKCE (`flowType: "pkce"`). Si ves una URL con `#access_token=...`, revisa que el redirect exacto esté en Supabase:
+
+```text
+https://decision-engine-opal.vercel.app/auth/callback
+```

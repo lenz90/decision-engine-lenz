@@ -17,7 +17,14 @@ export default function LoginCard({ authError, supabaseConfig }) {
 
     setIsLoading(true);
 
-    const supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey);
+    const supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey, {
+      auth: {
+        flowType: "pkce",
+        detectSessionInUrl: false,
+        persistSession: true,
+        autoRefreshToken: true,
+      },
+    });
     const { error: signInError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
