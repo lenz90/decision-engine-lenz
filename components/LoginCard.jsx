@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseBrowserClient } from "../lib/supabase/client";
 
 export default function LoginCard({ authError, supabaseConfig }) {
   const [error, setError] = useState(authError);
@@ -17,14 +17,10 @@ export default function LoginCard({ authError, supabaseConfig }) {
 
     setIsLoading(true);
 
-    const supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey, {
-      auth: {
-        flowType: "pkce",
-        detectSessionInUrl: false,
-        persistSession: true,
-        autoRefreshToken: true,
-      },
-    });
+    const supabase = createSupabaseBrowserClient(
+      supabaseConfig.url,
+      supabaseConfig.anonKey,
+    );
     const { error: signInError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
